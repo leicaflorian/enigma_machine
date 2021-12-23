@@ -35,7 +35,7 @@ const availableConfig = {
 
 export type RotorWheel = keyof typeof availableConfig;
 
-export class Rotor {
+export class Rotor extends EventTarget {
   protected id: RotorWheel;
   
   protected wiring: string;
@@ -53,16 +53,30 @@ export class Rotor {
   protected index: number
   
   constructor (version: RotorWheel, initialPosition: string, index: number) {
+    super();
+  
     if (!availableConfig[version]) {
       throw new Error("Unknown configuration")
     }
-    
+  
     this.id = version;
     this.turnover = availableConfig[version].turnover
     this.notch = availableConfig[version].notch
     this.wiring = availableConfig[version].wiring
-    this.position = this.wiring.indexOf(initialPosition.toUpperCase())
+    this.position = Alphabet.indexOf(initialPosition.toUpperCase())
     this.index = index;
+  }
+  
+  protected get prevPos () {
+    return this.position === 0 ? (Alphabet.length - 1) : (this.position - 1)
+  }
+  
+  protected get turnoverIndex () {
+    return Alphabet.indexOf(this.turnover)
+  }
+  
+  protected get visibleLetter() {
+    return Alphabet[this.position];
   }
   
   public input (letter: string, canIncrement = false) {
@@ -89,17 +103,31 @@ export class Rotor {
   protected checkRotation () {
     // first rotor must spin at each keypress
     if (this.index === 0) {
-      if (this.position >= this.wiring.length) {
-        this.position = 0
-      } else {
-        this.position++
-      }
-      
-      console.log(" -- newPosition", this.position)
+      this.causeRotation();
+    }
+  }
+  
+  public causeRotation () {
+    if (this.position >= this.wiring.length) {
+      this.position = 0
+    } else {
+      this.position++
     }
     
-    // TODO:: must implement the spinning of other rotors
+    console.log("turnover index", this.turnoverIndex, this.position, this.prevPos);
     
-    // check if the prev one caused the spin
+    // if the prev position was a turnover point,
+    // dispatch the rotorSpun event
+    if (this.prevPos === this.turnoverIndex) {
+      this.dispatchEvent(new CustomEvent("rotorSpun", {
+        detail: {
+          index: this.index,
+          newPosition: this.position
+        }
+      }))
+    }
+    
+    console.log(` -- newPosition[${this.index}]`, this.position)
+    
   }
 }
