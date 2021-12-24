@@ -46,7 +46,7 @@
       font-weight: bold;
       font-size: 1.3rem;
       color: white;
-      background-color: var(--bg-color-light);
+      background-color: var(--bg-color);
 
       &.active {
         animation: activate 1s;
@@ -54,15 +54,15 @@
 
       @keyframes activate {
         0% {
-          background-color: var(--bg-color-light);
+          background-color: var(--bg-color);
           color: white;
         }
         25% {
           background-color: #ffe100;
-          color: var(--bg-color-light);
+          color: var(--bg-color);
         }
         100% {
-          background-color: var(--bg-color-light);
+          background-color: var(--bg-color);
           color: white;
         }
       }

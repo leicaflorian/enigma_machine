@@ -12,6 +12,12 @@ export interface RotorData {
   down (): void;
 }
 
+export interface PlugboardData {
+  map: Record<string, string>;
+  
+  connect (from: string, to: string): void;
+}
+
 export class Enigma extends EventTarget {
   protected _rotors: Rotor[] = [];
   protected plugboard: Plugboard;
@@ -76,9 +82,16 @@ export class Enigma extends EventTarget {
         up: () => curr.causeRotation("up"),
         down: () => curr.causeRotation("down")
       })
-      
+  
       return acc;
     }, []);
+  }
+  
+  public get plugboardMap (): PlugboardData {
+    return {
+      map: this.plugboard.map,
+      connect: (a, b,) => this.plugboard.addMap(a, b)
+    }
   }
   
   private inputThroughRotors (letter: string): string {

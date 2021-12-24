@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container app-container" :class="{'plugboard-opened': plugBoardStatus}">
     <!-- rotors -->
     <RotorsBoard :rotors="enigma.rotorsList"></RotorsBoard>
 
@@ -7,16 +7,20 @@
     <LightsBoard :value="resultLetter"></LightsBoard>
 
     <!-- plug board -->
+    <PlugBoard :boardOpen="plugBoardStatus" @boardStatus="plugBoardStatus = $event"
+    :value="enigma.plugboardMap"></PlugBoard>
   </div>
 </template>
 
 <script setup lang="ts">
-  import LightsBoard from './components/LightsBoard.vue';
-  import { Enigma } from './composables/Enigma';
   import { ref } from 'vue';
+  import { Enigma } from './composables/Enigma';
+  import LightsBoard from './components/LightsBoard.vue';
   import RotorsBoard from './components/RotorsBoard.vue';
+  import PlugBoard from './components/PlugBoard.vue';
 
   const resultLetter = ref(null);
+  const plugBoardStatus = ref(true);
   const enigma = new Enigma(['I', 'IV', 'II'], ["B", "I", "A"], "B");
 
   enigma.addEventListener("encryption", (e: CustomEvent<string>) => {
@@ -32,10 +36,38 @@
 
 
   body {
-    --bg-color: #232323;
-    --bg-color-light: black;
+    --bg-color: black;
+    --bg-color-light: #232323;
     --spacer: 16px;
 
-    background-color: var(--bg-color);
+    background-color: var(--bg-color-light);
   }
+
+  .app-container {
+    &:after {
+      content: "";
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, .5);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+    }
+
+    &.plugboard-opened {
+      overflow: hidden;
+      height: 100vh;
+      padding-bottom: 10vh;
+
+      &:after {
+        pointer-events: all;
+        opacity: 1;
+      }
+    }
+  }
+
 </style>
