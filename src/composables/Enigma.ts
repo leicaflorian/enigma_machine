@@ -3,8 +3,17 @@ import { Plugboard } from './Plugboard';
 import { Reflector, ReflectorWheel } from './Reflector';
 import { Alphabet } from './enums/Alphabet';
 
+export interface RotorData {
+  letter: string;
+  index: number,
+  
+  up (): void;
+  
+  down (): void;
+}
+
 export class Enigma extends EventTarget {
-  protected rotors: Rotor[] = [];
+  protected _rotors: Rotor[] = [];
   protected plugboard: Plugboard;
   protected reflector: Reflector;
   
@@ -16,13 +25,13 @@ export class Enigma extends EventTarget {
       
       rotor.addEventListener("rotorSpun", (e: CustomEvent<{ index: number }>) => {
         const index = e.detail.index;
-        
-        if (index < this.rotors.length - 1) {
-          this.rotors[index + 1].causeRotation()
+  
+        if (index < this._rotors.length - 1) {
+          this._rotors[index + 1].causeRotation()
         }
       })
       
-      this.rotors.push(rotor)
+      this._rotors.push(rotor)
     })
     
     // must also add the initial position
@@ -36,7 +45,7 @@ export class Enigma extends EventTarget {
         // different key than the valid ones
         return;
       }
-      
+  
       const result = this.input(key);
       // console.log("IN", key, "OUT", this.input(key));
       this.dispatchEvent(new CustomEvent("encryption", { detail: result }))
@@ -47,6 +56,8 @@ export class Enigma extends EventTarget {
     
     // add the new one
     window.addEventListener("keydown", onKeydown);
+    
+    window["enigma"] = this;
   }
   
   public input (letter): string {
@@ -57,16 +68,29 @@ export class Enigma extends EventTarget {
     return finalLetter;
   }
   
+  public get rotorsList (): RotorData[] {
+    return this._rotors.reduce<RotorData[]>((acc, curr) => {
+      acc.push({
+        letter: curr.letter,
+        index: curr.index,
+        up: () => curr.causeRotation("up"),
+        down: () => curr.causeRotation("down")
+      })
+      
+      return acc;
+    }, []);
+  }
+  
   private inputThroughRotors (letter: string): string {
-    let rt1 = this.rotors[0].input(letter, true);
-    let rt2 = this.rotors[1].input(rt1, true);
-    let rt3 = this.rotors[2].input(rt2, true);
+    let rt1 = this._rotors[0].input(letter, true);
+    let rt2 = this._rotors[1].input(rt1, true);
+    let rt3 = this._rotors[2].input(rt2, true);
     
     let rfl = this.reflector.input(rt3);
     
-    let rt4 = this.rotors[0].input(rfl);
-    let rt5 = this.rotors[1].input(rt4);
-    let rt6 = this.rotors[2].input(rt5);
+    let rt4 = this._rotors[0].input(rfl);
+    let rt5 = this._rotors[1].input(rt4);
+    let rt6 = this._rotors[2].input(rt5);
     
     return rt6
   }

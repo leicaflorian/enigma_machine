@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.16.6.tgz#8f194828193e8fa79166f34a4b4e52f3e769a314"
   integrity sha512-Gr86ujcNuPDnNOY8mi383Hvi8IYrJVJYuf3XcuBM/Dgd+bINn/7tHqsj+tKkoreMbmGsFLsltI/JJd8fOFWGDQ==
 
+"@fortawesome/fontawesome-free@^5.15.4":
+  version "5.15.4"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.4.tgz#ecda5712b61ac852c760d8b3c79c96adca5554e5"
+  integrity sha512-eYm8vijH/hpzr/6/1CJ/V/Eb1xQFW2nnUKArb3z+yUWv7HTwj6M7SP957oMjfZjAHU6qpoNc2wQvIxBLWYa/Jg==
+
 "@vitejs/plugin-vue@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-2.0.1.tgz#db0e5eacf96358e04cc501c9008079b25a70a4ac"

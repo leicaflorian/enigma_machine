@@ -1,11 +1,13 @@
 <template>
-  <template v-for="row in rows">
-    <div class="row mb-2">
-      <div class="col" v-for="letter in row">
-        <div class="letter" :class="{'active': value === letter}">{{ letter }}</div>
+  <div class="light-board">
+    <template v-for="row in rows">
+      <div class="row mb-2">
+        <div class="col" v-for="letter in row">
+          <div class="letter" :class="{'active': value === letter}">{{ letter }}</div>
+        </div>
       </div>
-    </div>
-  </template>
+    </template>
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,30 +29,42 @@
 </script>
 
 <style scoped lang="scss">
-  ::v-deep .letter {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: solid 1px black;
-    border-radius: 50%;
-    margin: auto;
-    transition: background-color .3s;
+  .light-board {
+    padding-top: calc(var(--spacer) * 2);
+    padding-bottom: calc(var(--spacer) * 2);
 
-    &.active {
-      animation: activate 1s;
-    }
+    .letter {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: solid 1px black;
+      border-radius: 50%;
+      margin: auto;
+      transition: background-color .3s;
+      font-weight: bold;
+      font-size: 1.3rem;
+      color: white;
+      background-color: var(--bg-color-light);
 
-    @keyframes activate {
-      0% {
-        background-color: transparent;
+      &.active {
+        animation: activate 1s;
       }
-      25% {
-        background-color: yellow;
-      }
-      100% {
-        background-color: transparent;
+
+      @keyframes activate {
+        0% {
+          background-color: var(--bg-color-light);
+          color: white;
+        }
+        25% {
+          background-color: #ffe100;
+          color: var(--bg-color-light);
+        }
+        100% {
+          background-color: var(--bg-color-light);
+          color: white;
+        }
       }
     }
   }
