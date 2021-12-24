@@ -76,6 +76,10 @@ export class Rotor extends EventTarget {
     return this.position.value === 0 ? (Alphabet.length - 1) : (this.position.value - 1)
   }
   
+  public get type () {
+    return this.id
+  }
+  
   protected get turnoverIndex () {
     return Alphabet.indexOf(this.turnover)
   }

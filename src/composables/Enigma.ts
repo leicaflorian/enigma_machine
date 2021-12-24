@@ -6,6 +6,7 @@ import { Alphabet } from './enums/Alphabet';
 export interface RotorData {
   letter: string;
   index: number,
+  type: string,
   
   up (): void;
   
@@ -79,6 +80,7 @@ export class Enigma extends EventTarget {
       acc.push({
         letter: curr.letter,
         index: curr.index,
+        type: curr.type,
         up: () => curr.causeRotation("up"),
         down: () => curr.causeRotation("down")
       })

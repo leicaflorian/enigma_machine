@@ -1,5 +1,7 @@
 <template>
   <div class="container app-container" :class="{'plugboard-opened': plugBoardStatus}">
+    <h1 class="text-light text-center py-3">Enigma machine</h1>
+
     <!-- rotors -->
     <RotorsBoard :rotors="enigma.rotorsList"></RotorsBoard>
 
@@ -20,8 +22,8 @@
   import PlugBoard from './components/PlugBoard.vue';
 
   const resultLetter = ref(null);
-  const plugBoardStatus = ref(true);
-  const enigma = new Enigma(['I', 'IV', 'II'], ["B", "I", "A"], "B");
+  const plugBoardStatus = ref(false);
+  const enigma = new Enigma(['III', 'I', 'II'], ["B", "I", "A"], "A");
 
   enigma.addEventListener("encryption", (e: CustomEvent<string>) => {
     resultLetter.value = e.detail

@@ -3,9 +3,9 @@
     <div class="rotor mx-3" v-for="rotor in sortedRotors">
 
       <div class="btn-group-vertical align-items-center">
-        <h3 class="text-light">
-          {{ rotor.index }}
-        </h3>
+        <span class="text-light">
+          {{ rotor.index }} - {{ rotor.type }}
+        </span>
 
         <button class="btn btn-primary" @click="rotor.up()"><i class="fas fa-chevron-up"></i></button>
         <div class="rotor-letter text-light form-control text-dark text-center">{{ rotor.letter }}</div>
